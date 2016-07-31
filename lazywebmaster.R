@@ -10,13 +10,13 @@ email_sheet <- gs_title("Lazy Webmaster")
 email_data <- email_sheet %>%
   gs_read()
 
-# Function that takes two strings: message text and links and assembles 
-# a string of html with the links plugged into the message text. 
+
 
 # message_text = email_data$`Message Text`[2]
 # link_text = email_data$Links[2]
 
-#takes two strings, the content of the message cell and the links cell and turns into into valid linked html. 
+# Function that takes two strings: message text and links and assembles 
+# a string of valid html with the links plugged into the message text. 
 make_message <- function(message_text, link_text){
   #first parse links into a vector
   links_vec <- strsplit(link_text, ",")[[1]]
@@ -44,5 +44,7 @@ make_message <- function(message_text, link_text){
   }
   message
 }
+
+
 
 
