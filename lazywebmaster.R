@@ -10,11 +10,6 @@ email_sheet <- gs_title("Lazy Webmaster")
 email_data <- email_sheet %>%
   gs_read()
 
-
-
-# message_text = email_data$`Message Text`[2]
-# link_text = email_data$Links[2]
-
 # Function that takes two strings: message text and links and assembles 
 # a string of valid html with the links plugged into the message text. 
 make_message <- function(message_text, link_text){
@@ -45,6 +40,25 @@ make_message <- function(message_text, link_text){
   message
 }
 
+#Initialize a vector to hold the parsed html
+html_vec <- c()
 
+#loop through each row in the google sheet
+for(rowNum in 1:dim(email_data)[1]){
 
+  #grab the message and links and generate the message html
+  message_text <- email_data$`Message Text`[rowNum]
+  link_text    <- email_data$Links[rowNum]
+  message_html <- make_message(message_text, link_text)
+  
+  #Grab the Group name
+  group_name <- email_data$`Club/Person's Name`[rowNum]
+  
+  result   <- sprintf("<h2> %s </h2> \n <p> %s </p> \n",group_name, message_html )
+  html_vec <- c(html_vec, result)
+  cat(result)
+}
 
+fileConn <- file("email.html")
+writeLines(html_vec, fileConn)
+close(fileConn)
