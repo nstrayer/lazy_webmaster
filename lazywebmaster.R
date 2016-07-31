@@ -2,13 +2,20 @@
 library("googlesheets")
 library("dplyr")
 library("stringr")
+library("lubridate")
 
 #Register the sheet with google sheets. 
 email_sheet <- gs_title("Lazy Webmaster")
 
+currentDate <- Sys.Date()
+
 #read in the sheet as a dataframe
 email_data <- email_sheet %>%
-  gs_read()
+  gs_read() %>% 
+  mutate(startDate = mdy(`Start Date`), 
+         endDate   = mdy(`End Date`)) %>% 
+  filter(startDate < currentDate & endDate > currentDate)
+  
 
 # Function that takes two strings: message text and links and assembles 
 # a string of valid html with the links plugged into the message text. 
